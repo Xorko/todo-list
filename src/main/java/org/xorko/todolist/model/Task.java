@@ -14,7 +14,7 @@ import java.time.LocalDate;
 
 public class Task {
     /** The number of tasks created. It will be used to set the task id */
-    public static int s_id = 1;
+    public static int s_id = 0;
 
     private final SimpleIntegerProperty id;
     private final SimpleStringProperty name;

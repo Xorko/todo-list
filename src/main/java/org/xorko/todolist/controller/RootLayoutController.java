@@ -9,6 +9,7 @@ import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.stage.FileChooser;
 import org.xorko.todolist.MainApp;
+import org.xorko.todolist.model.Task;
 
 import java.io.File;
 
@@ -64,6 +65,7 @@ public class RootLayoutController {
         File file = fileChooser.showOpenDialog(mainApp.getPrimaryStage());
 
         if (file != null) {
+            Task.s_id = 0;
             mainApp.loadTaskDataFromFile(file);
         }
     }

@@ -7,7 +7,6 @@ import com.fasterxml.jackson.databind.type.CollectionType;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -40,6 +39,11 @@ public class MainApp extends Application {
         this.primaryStage.setTitle("Todo list");
         initRootLayout();
         showTodo();
+        File file = getFilePath();
+        if (file != null) {
+            loadTaskDataFromFile(file);
+
+        }
     }
 
     public void initRootLayout() {
@@ -106,7 +110,7 @@ public class MainApp extends Application {
         try {
             ObjectMapper mapper = new ObjectMapper();
             ObjectWriter writer = mapper.writer().withDefaultPrettyPrinter();
-            writer.writeValue(file, (List<Task>) taskData);
+            writer.writeValue(file, taskData);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -123,6 +127,7 @@ public class MainApp extends Application {
                 taskData.clear();
                 taskData.addAll(tasks);
                 setFilePath(file);
+                primaryStage.setTitle(primaryStage.getTitle() + " - " + file.getName());
             } catch (IOException e) {
                 e.printStackTrace();
             }
