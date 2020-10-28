@@ -7,7 +7,7 @@ plugins {
 group 'org.xorko'
 version '1.0-SNAPSHOT'
 
-mainClassName = "org.xorko.todolist.MainApp"
+mainClassName = "org.xorko.todolist.Launcher"
 
 repositories {
     mavenCentral()
@@ -20,6 +20,25 @@ dependencies {
     implementation 'com.fasterxml.jackson.core:jackson-annotations:2.11.3'
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.11.3'
     testImplementation group: 'junit', name: 'junit', version: '4.12'
+}
+
+jar {
+    manifest {
+        attributes "Main-Class": "org.xorko.todolist.Launcher"
+    }
+
+    from {
+        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
+
+task fatJar(type: Jar) {
+    manifest {
+        attributes "Main-Class": "org.xorko.todolist.Launcher"
+        attributes "Class-Path": configurations.compile.collect { it.getName() }.join(' ')
+    }
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
 }
 
 javafx {
