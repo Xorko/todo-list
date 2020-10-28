@@ -6,15 +6,9 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.util.StringConverter;
 import org.xorko.todolist.MainApp;
-import org.xorko.todolist.db.Database;
-import org.xorko.todolist.db.Queries;
 import org.xorko.todolist.model.Task;
 import org.xorko.todolist.util.DateUtil;
 
-import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.time.LocalDate;
 
 public class TodoController {
