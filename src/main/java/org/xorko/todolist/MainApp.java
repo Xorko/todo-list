@@ -1,10 +1,5 @@
 package org.xorko.todolist;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.databind.type.CollectionType;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -15,21 +10,29 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import org.xorko.todolist.controller.RootLayoutController;
 import org.xorko.todolist.controller.TodoController;
+import org.xorko.todolist.db.Database;
+import org.xorko.todolist.db.Queries;
 import org.xorko.todolist.model.Task;
+import org.xorko.todolist.util.DateUtil;
 
-import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.prefs.Preferences;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.time.LocalDate;
 
 public class MainApp extends Application {
 
     private Stage primaryStage;
     private BorderPane rootLayout;
+    private GridPane todo;
 
     private final ObservableList<Task> taskData = FXCollections.observableArrayList();
+
+    public MainApp() {
+        loadTasks();
+    }
 
     public static void main(String[] args) {
         launch(args);
@@ -66,12 +69,12 @@ public class MainApp extends Application {
 
     public void showTodo() {
         try {
-            // Load TaskOverview layout from fxml file
+            // Load TodoView layout from fxml file
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(MainApp.class.getResource("/view/TodoView.fxml"));
-            GridPane todo = loader.load();
+            todo = loader.load();
 
-            // Set TaskOverview into the center of the root layout
+            // Set TodoView into the center of the root layout
             rootLayout.setCenter(todo);
 
             // Give the controller access to the main app
@@ -82,51 +85,37 @@ public class MainApp extends Application {
         }
     }
 
-    public File getFilePath() {
-        Preferences prefs = Preferences.userNodeForPackage(MainApp.class);
-        String filePath = prefs.get("filePath", null);
-        if (filePath != null) {
-            return new File(filePath);
-        } else {
-            return null;
-        }
-    }
-
-    public void setFilePath(File file) {
-        Preferences prefs = Preferences.userNodeForPackage(MainApp.class);
-        if (file != null) {
-            prefs.put("filePath", file.getPath());
-            primaryStage.setTitle("Todo list - " + file.getName());
-        } else {
-            prefs.remove("filePath");
-            primaryStage.setTitle("Todo list");
-        }
-    }
-
-    public void saveTaskDataToFile(File file) {
+    /**
+     * Load tasks from the database and refresh taskData
+     */
+    public void loadTasks() {
+        ResultSet rs;
         try {
-            ObjectMapper mapper = new ObjectMapper();
-            ObjectWriter writer = mapper.writer().withDefaultPrettyPrinter();
-            writer.writeValue(file, (List<Task>) taskData);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void loadTaskDataFromFile(File file) {
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.registerModule(new JavaTimeModule());
-        mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-        if (file != null) {
-            try {
-                CollectionType taskListType = mapper.getTypeFactory().constructCollectionType(List.class, Task.class);
-                List<Task> tasks = mapper.readValue(file, taskListType);
-                taskData.clear();
-                taskData.addAll(tasks);
-                setFilePath(file);
-            } catch (IOException e) {
-                e.printStackTrace();
+            Connection connection = Database.getConnection();
+            String query = Queries.getQuery("task.select.all");
+            PreparedStatement stmt = connection.prepareStatement(query);
+            rs = stmt.executeQuery();
+            Task tempTask;
+            taskData.clear();
+            if (rs != null) {
+                while (rs.next()) {
+                    tempTask = new Task();
+                    tempTask.setTaskID(rs.getInt("id"));
+                    tempTask.setName(rs.getString("name"));
+                    if (rs.getString("date") != null) {
+                        if (!rs.getString("date").isEmpty()) {
+                            LocalDate date = DateUtil.parse(rs.getString("date"));
+                            tempTask.setDate(date);
+                        }
+                    }
+                    tempTask.setDone(rs.getBoolean("done"));
+                    taskData.add(tempTask);
+                }
             }
+        } catch (IOException e) {
+            System.out.println("Could not access to queries.properties");
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 

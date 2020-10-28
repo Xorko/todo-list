@@ -54,9 +54,21 @@ public class TodoController {
             CheckBox checkBox = new CheckBox();
             // Set the state of the object to the checkbox
             checkBox.setSelected(cellData.getValue().isDone());
-            // Change the state
+            // Change the state in DB
             checkBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
-                 cellData.getValue().setDone(newValue);
+                try {
+                    Connection connection = Database.getConnection();
+                    String query = Queries.getQuery("task.update.state");
+                    PreparedStatement stmt = connection.prepareStatement(query);
+                    stmt.setBoolean(1, newValue);
+                    stmt.setInt(2, cellData.getValue().getId());
+                    stmt.execute();
+                    mainApp.loadTasks();
+                } catch (IOException e) {
+                    System.out.println("Could not access to queries.properties");
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
             });
             return new SimpleObjectProperty<>(checkBox);
         });
@@ -78,14 +90,26 @@ public class TodoController {
     @FXML
     private void handleNewTask() {
         if (fieldsAreValid()) {
-            Task newTask = new Task();
-            newTask.setId(Task.s_id);
-            newTask.setName(nameField.getText());
-            if (!hasNoDateCheck.isSelected()) {
-                newTask.setDate(DateUtil.parse(datePicker.getEditor().getText()));
+            try {
+                Connection connection = Database.getConnection();
+                String query;
+                PreparedStatement stmt;
+                if (hasNoDateCheck.isSelected()) {
+                    query = Queries.getQuery("task.insert.name");
+                    stmt = connection.prepareStatement(query);
+                } else {
+                    query = Queries.getQuery("task.insert");
+                    stmt = connection.prepareStatement(query);
+                    stmt.setString(2, datePicker.getEditor().getText());
+                }
+                stmt.setString(1, nameField.getText());
+                stmt.execute();
+                mainApp.loadTasks();
+            } catch (IOException e) {
+                System.out.println("Could not access to queries.properties");
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
-            newTask.setDone(false);
-            mainApp.getTaskData().add(newTask);
         }
     }
 
@@ -128,12 +152,29 @@ public class TodoController {
             newTask.setDisable(false);
             saveTask.setVisible(false);
             saveTask.setDisable(true);
-            if (hasNoDateCheck.isSelected())
-                currentlyEdited.setDate(null);
-            else
-                currentlyEdited.setDate(DateUtil.parse(datePicker.getEditor().getText()));
-            currentlyEdited.setName(nameField.getText());
-            currentlyEdited = null;
+            try {
+                Connection connection = Database.getConnection();
+                String query;
+                PreparedStatement stmt;
+                if (hasNoDateCheck.isSelected()) {
+                    query = Queries.getQuery("task.update.name");
+                    stmt = connection.prepareStatement(query);
+                    stmt.setInt(2, currentlyEdited.getId());
+                } else {
+                    query = Queries.getQuery("task.update.name.date");
+                    stmt = connection.prepareStatement(query);
+                    stmt.setString(2, datePicker.getEditor().getText());
+                    stmt.setInt(3, currentlyEdited.getId());
+                }
+                stmt.setString(1, nameField.getText());
+                stmt.execute();
+                currentlyEdited = null;
+                mainApp.loadTasks();
+            } catch (IOException e) {
+                System.out.println("Could not access to queries.properties");
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -141,7 +182,18 @@ public class TodoController {
     private void handleDeleteTask() {
         Task selectedTask = taskTable.getSelectionModel().selectedItemProperty().getValue();
         if (selectedTask != null) {
-            mainApp.getTaskData().removeAll(selectedTask);
+            try {
+                Connection connection = Database.getConnection();
+                String query = Queries.getQuery("task.delete");
+                PreparedStatement stmt = connection.prepareStatement(query);
+                stmt.setInt(1, selectedTask.getId());
+                stmt.execute();
+                mainApp.loadTasks();
+            } catch (IOException e) {
+                System.out.println("Could not access to queries.properties");
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         } else {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.initOwner(mainApp.getPrimaryStage());
