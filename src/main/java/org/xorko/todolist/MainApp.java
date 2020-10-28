@@ -66,12 +66,12 @@ public class MainApp extends Application {
 
     public void showTodo() {
         try {
-            // Load TaskOverview layout from fxml file
+            // Load TodoView layout from fxml file
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(MainApp.class.getResource("/view/TodoView.fxml"));
             GridPane todo = loader.load();
 
-            // Set TaskOverview into the center of the root layout
+            // Set TodoView into the center of the root layout
             rootLayout.setCenter(todo);
 
             // Give the controller access to the main app
