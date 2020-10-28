@@ -80,12 +80,13 @@ public class TodoController {
             }
             newTask.setDone(false);
             mainApp.getTaskData().add(newTask);
+            taskTable.refresh();
         }
     }
 
     @FXML
     private void handleEditTask() {
-        Task selectedTask = taskTable.getSelectionModel().selectedItemProperty().getValue();
+        Task selectedTask = taskTable.getSelectionModel().getSelectedItem();
         currentlyEdited = selectedTask;
         if (selectedTask != null) {
             // Button disabling is only for safety reason, it's not needed to work correctly
@@ -116,33 +117,34 @@ public class TodoController {
     @FXML
     private void handleSaveTask() {
         if (fieldsAreValid()) {
-            System.out.println("Saved");
             // Button disabling is only for safety reason, it's not needed to work correctly
             newTask.setVisible(true);
             newTask.setDisable(false);
             saveTask.setVisible(false);
             saveTask.setDisable(true);
-            if (hasNoDateCheck.isSelected())
+            if (hasNoDateCheck.isSelected()) {
                 currentlyEdited.setDate(null);
-            else
+            } else {
                 currentlyEdited.setDate(DateUtil.parse(datePicker.getEditor().getText()));
+            }
             currentlyEdited.setName(nameField.getText());
             currentlyEdited = null;
+            taskTable.refresh();
         }
     }
 
     @FXML
     private void handleDeleteTask() {
-        Task selectedTask = taskTable.getSelectionModel().selectedItemProperty().getValue();
+        Task selectedTask = taskTable.getSelectionModel().getSelectedItem();
         if (selectedTask != null) {
-            mainApp.getTaskData().removeAll(selectedTask);
+            mainApp.getTaskData().remove(selectedTask);
+            taskTable.refresh();
         } else {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.initOwner(mainApp.getPrimaryStage());
             alert.setTitle("No selection");
             alert.setHeaderText("No task selected");
             alert.setContentText("Please select a task in the table.");
-
             alert.showAndWait();
         }
     }
