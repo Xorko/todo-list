@@ -7,7 +7,6 @@
 * Linux/macOS: `./gradlew run`
 
 ### Improvements Ideas
-* For learning purposes, I used a SQLite database to store tasks. It would be more convenient to store them into something like a JSON file and add the possibility to save/load this file
 * Show tasks from newest to the oldest
 * Better UI
 * CSS
