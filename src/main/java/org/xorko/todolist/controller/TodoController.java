@@ -67,6 +67,14 @@ public class TodoController {
                 return DateUtil.parse(string);
             }
         });
+
+        taskNameColumn.prefWidthProperty().bind(taskTable.widthProperty().multiply(0.75));
+        taskDateColumn.prefWidthProperty().bind(taskTable.widthProperty().multiply(0.15));
+        taskStatusColumn.prefWidthProperty().bind(taskTable.widthProperty().multiply(0.1));
+
+        taskStatusColumn.setResizable(false);
+        taskDateColumn.setResizable(false);
+        taskStatusColumn.setResizable(false);
     }
 
     @FXML

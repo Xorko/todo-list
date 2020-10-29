@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<GridPane prefHeight="690.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.xorko.todolist.controller.TodoController">
+<GridPane prefHeight="690.0" prefWidth="1280.0" stylesheets="@../css/stylesheet.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.xorko.todolist.controller.TodoController">
   <columnConstraints>
       <ColumnConstraints hgrow="SOMETIMES" maxWidth="400.0" minWidth="10.0" prefWidth="300.0" />
       <ColumnConstraints hgrow="SOMETIMES" maxWidth="633.0" minWidth="10.0" prefWidth="254.0" />
@@ -27,12 +27,9 @@
             <TableView fx:id="taskTable" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
               <columns>
                 <TableColumn fx:id="taskNameColumn" prefWidth="75.0" text="Task" />
-                <TableColumn fx:id="taskDateColumn" prefWidth="75.0" text="Date" />
-                  <TableColumn fx:id="taskStatusColumn" prefWidth="75.0" text="Status" />
+                <TableColumn fx:id="taskDateColumn" prefWidth="75.0" styleClass="centered" text="Date" />
+                  <TableColumn fx:id="taskStatusColumn" prefWidth="75.0" styleClass="centered" text="Status" />
               </columns>
-               <columnResizePolicy>
-                  <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-               </columnResizePolicy>
             </TableView>
          </children>
       </AnchorPane>
