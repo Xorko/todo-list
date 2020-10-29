@@ -7,7 +7,5 @@
 * Linux/macOS: `./gradlew run`
 
 ### Improvements Ideas
-* Show tasks from newest to the oldest
-* Better UI
-* CSS
+* Better UI / CSS
 * Unit tests

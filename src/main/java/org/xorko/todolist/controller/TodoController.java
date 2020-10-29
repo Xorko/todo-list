@@ -87,7 +87,7 @@ public class TodoController {
                 newTask.setDate(DateUtil.parse(datePicker.getEditor().getText()));
             }
             newTask.setDone(false);
-            mainApp.getTaskData().add(newTask);
+            mainApp.getTaskData().add(0, newTask);
             taskTable.refresh();
             mainApp.setDifferentFromSaved(true);
         }
