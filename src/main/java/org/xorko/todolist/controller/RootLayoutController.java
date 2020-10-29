@@ -104,24 +104,7 @@ public class RootLayoutController {
 
     @FXML
     private void handleQuit() {
-        // Check if current list has been saved. If not, ask the user if he wants to save
-        if (mainApp.isDifferentFromSaved()) {
-            File file = mainApp.getFilePath();
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-            alert.initOwner(mainApp.getPrimaryStage());
-            if (file != null) {
-                alert.setTitle("Current list has not been saved");
-                alert.setHeaderText("Current list has not been saved");
-                alert.setContentText("Save ?");
-            }
-            ButtonType yesButton = new ButtonType("Yes", ButtonBar.ButtonData.YES);
-            ButtonType noButton = new ButtonType("No", ButtonBar.ButtonData.NO);
-            alert.getButtonTypes().setAll(noButton, yesButton);
-            Optional<ButtonType> result = alert.showAndWait();
-            if (result.isPresent() && result.get() == yesButton) {
-                mainApp.saveTaskDataToFile(file);
-            }
-        }
+        mainApp.verifyIfListIsSaved();
         System.exit(0);
     }
 

@@ -10,6 +10,9 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ButtonType;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
@@ -20,6 +23,7 @@ import org.xorko.todolist.model.Task;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 import java.util.prefs.Preferences;
 
 public class MainApp extends Application {
@@ -45,6 +49,10 @@ public class MainApp extends Application {
             loadTaskDataFromFile(file);
 
         }
+        this.primaryStage.setOnCloseRequest(event -> {
+            verifyIfListIsSaved();
+            System.exit(0);
+        });
     }
 
     public void initRootLayout() {
@@ -133,6 +141,26 @@ public class MainApp extends Application {
                 differentFromSaved = false;
             } catch (IOException e) {
                 e.printStackTrace();
+            }
+        }
+    }
+
+    public void verifyIfListIsSaved() {
+        if (isDifferentFromSaved()) {
+            File file = getFilePath();
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.initOwner(getPrimaryStage());
+            if (file != null) {
+                alert.setTitle("Current list has not been saved");
+                alert.setHeaderText("Current list has not been saved");
+                alert.setContentText("Save ?");
+            }
+            ButtonType yesButton = new ButtonType("Yes", ButtonBar.ButtonData.YES);
+            ButtonType noButton = new ButtonType("No", ButtonBar.ButtonData.NO);
+            alert.getButtonTypes().setAll(noButton, yesButton);
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.isPresent() && result.get() == yesButton) {
+                saveTaskDataToFile(file);
             }
         }
     }
