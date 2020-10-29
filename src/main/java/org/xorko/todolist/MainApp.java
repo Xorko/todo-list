@@ -146,7 +146,7 @@ public class MainApp extends Application {
     }
 
     public void verifyIfListIsSaved() {
-        if (isDifferentFromSaved()) {
+        if (differentFromSaved) {
             File file = getFilePath();
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.initOwner(getPrimaryStage());
@@ -167,10 +167,6 @@ public class MainApp extends Application {
 
     public ObservableList<Task> getTaskData() {
         return taskData;
-    }
-
-    public boolean isDifferentFromSaved() {
-        return differentFromSaved;
     }
 
     public void setDifferentFromSaved(boolean differentFromSaved) {

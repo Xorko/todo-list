@@ -11,7 +11,6 @@ import org.xorko.todolist.MainApp;
 import org.xorko.todolist.model.Task;
 
 import java.io.File;
-import java.util.Optional;
 
 public class RootLayoutController {
 
