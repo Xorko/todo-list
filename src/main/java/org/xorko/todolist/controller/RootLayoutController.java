@@ -110,6 +110,7 @@ public class RootLayoutController {
     @FXML
     private void handleAbout() {
         Alert about = new Alert(Alert.AlertType.INFORMATION);
+        about.initOwner(mainApp.getPrimaryStage());
         about.setHeaderText("Todo list");
         about.setContentText("Author: Xorko\nGitHub: https://www.github.com/Xorko");
         about.showAndWait();
