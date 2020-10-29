@@ -48,7 +48,7 @@ public class TodoController {
             CheckBox checkBox = new CheckBox();
             // Set the state of the object to the checkbox
             checkBox.setSelected(cellData.getValue().isDone());
-            // Change the state
+            // Change the state in the object
             checkBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
                  cellData.getValue().setDone(newValue);
             });
