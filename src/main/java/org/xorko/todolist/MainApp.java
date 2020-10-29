@@ -26,6 +26,7 @@ public class MainApp extends Application {
 
     private Stage primaryStage;
     private BorderPane rootLayout;
+    private boolean differentFromSaved;
 
     private final ObservableList<Task> taskData = FXCollections.observableArrayList();
 
@@ -111,6 +112,7 @@ public class MainApp extends Application {
             ObjectMapper mapper = new ObjectMapper();
             ObjectWriter writer = mapper.writer().withDefaultPrettyPrinter();
             writer.writeValue(file, taskData);
+            differentFromSaved = false;
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -128,6 +130,7 @@ public class MainApp extends Application {
                 taskData.addAll(tasks);
                 setFilePath(file);
                 primaryStage.setTitle(primaryStage.getTitle() + " - " + file.getName());
+                differentFromSaved = false;
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -136,6 +139,14 @@ public class MainApp extends Application {
 
     public ObservableList<Task> getTaskData() {
         return taskData;
+    }
+
+    public boolean isDifferentFromSaved() {
+        return differentFromSaved;
+    }
+
+    public void setDifferentFromSaved(boolean differentFromSaved) {
+        this.differentFromSaved = differentFromSaved;
     }
 
     public Stage getPrimaryStage() {

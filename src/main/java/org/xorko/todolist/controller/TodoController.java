@@ -68,7 +68,7 @@ public class TodoController {
             }
         });
 
-        taskNameColumn.prefWidthProperty().bind(taskTable.widthProperty().multiply(0.75));
+        taskNameColumn.prefWidthProperty().bind(taskTable.widthProperty().multiply(0.747));
         taskDateColumn.prefWidthProperty().bind(taskTable.widthProperty().multiply(0.15));
         taskStatusColumn.prefWidthProperty().bind(taskTable.widthProperty().multiply(0.1));
 
@@ -89,6 +89,7 @@ public class TodoController {
             newTask.setDone(false);
             mainApp.getTaskData().add(newTask);
             taskTable.refresh();
+            mainApp.setDifferentFromSaved(true);
         }
     }
 
@@ -138,6 +139,7 @@ public class TodoController {
             currentlyEdited.setName(nameField.getText());
             currentlyEdited = null;
             taskTable.refresh();
+            mainApp.setDifferentFromSaved(true);
         }
     }
 
@@ -147,6 +149,7 @@ public class TodoController {
         if (selectedTask != null) {
             mainApp.getTaskData().remove(selectedTask);
             taskTable.refresh();
+            mainApp.setDifferentFromSaved(true);
         } else {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.initOwner(mainApp.getPrimaryStage());
