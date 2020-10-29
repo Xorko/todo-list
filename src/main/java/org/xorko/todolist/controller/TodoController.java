@@ -81,7 +81,6 @@ public class TodoController {
     private void handleNewTask() {
         if (fieldsAreValid()) {
             Task newTask = new Task();
-            newTask.setId(Task.s_id);
             newTask.setName(nameField.getText());
             if (!hasNoDateCheck.isSelected()) {
                 newTask.setDate(DateUtil.parse(datePicker.getEditor().getText()));

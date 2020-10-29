@@ -65,7 +65,6 @@ public class RootLayoutController {
         File file = fileChooser.showOpenDialog(mainApp.getPrimaryStage());
 
         if (file != null) {
-            Task.s_id = 0;
             mainApp.loadTaskDataFromFile(file);
         }
     }

@@ -13,10 +13,6 @@ import javafx.beans.property.SimpleStringProperty;
 import java.time.LocalDate;
 
 public class Task {
-    /** The number of tasks created. It will be used to set the task id */
-    public static int s_id = 0;
-
-    private final SimpleIntegerProperty id;
     private final SimpleStringProperty name;
     private final SimpleBooleanProperty done;
 
@@ -30,23 +26,9 @@ public class Task {
     }
 
     public Task(String name, LocalDate date) {
-        ++s_id;
-        this.id = new SimpleIntegerProperty(s_id);
         this.name = new SimpleStringProperty(name);
         this.done = new SimpleBooleanProperty();
         this.date = new SimpleObjectProperty<>(date);
-    }
-
-    public int getId() {
-        return id.get();
-    }
-
-    public void setId(int id) {
-        this.id.set(id);
-    }
-
-    public SimpleIntegerProperty idProperty() {
-        return id;
     }
 
     public String getName() {
