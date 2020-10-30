@@ -8,7 +8,6 @@ import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.stage.FileChooser;
 import org.xorko.todolist.MainApp;
-import org.xorko.todolist.model.Task;
 
 import java.io.File;
 
@@ -102,8 +101,8 @@ public class RootLayoutController {
 
     @FXML
     private void handleQuit() {
-        mainApp.verifyIfListIsSaved();
-        System.exit(0);
+        if (mainApp.beforeExitingCheck())
+            System.exit(0);
     }
 
     @FXML

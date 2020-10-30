@@ -50,8 +50,8 @@ public class MainApp extends Application {
 
         }
         this.primaryStage.setOnCloseRequest(event -> {
-            verifyIfListIsSaved();
-            System.exit(0);
+            if (beforeExitingCheck())
+                System.exit(0);
         });
     }
 
@@ -145,7 +145,7 @@ public class MainApp extends Application {
         }
     }
 
-    public void verifyIfListIsSaved() {
+    public boolean beforeExitingCheck() {
         if (differentFromSaved) {
             File file = getFilePath();
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -157,12 +157,17 @@ public class MainApp extends Application {
             }
             ButtonType yesButton = new ButtonType("Yes", ButtonBar.ButtonData.YES);
             ButtonType noButton = new ButtonType("No", ButtonBar.ButtonData.NO);
-            alert.getButtonTypes().setAll(noButton, yesButton);
+            ButtonType cancelButton = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
+            alert.getButtonTypes().setAll(yesButton, noButton, cancelButton);
             Optional<ButtonType> result = alert.showAndWait();
             if (result.isPresent() && result.get() == yesButton) {
                 saveTaskDataToFile(file);
+                return true;
+            } else if (result.isPresent() && result.get() == cancelButton) {
+                return false;
             }
         }
+        return true;
     }
 
     public ObservableList<Task> getTaskData() {
