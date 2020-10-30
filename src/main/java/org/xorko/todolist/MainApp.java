@@ -155,17 +155,12 @@ public class MainApp extends Application {
                 alert.setHeaderText("Current list has not been saved");
                 alert.setContentText("Save ?");
             }
-            ButtonType yesButton = new ButtonType("Yes", ButtonBar.ButtonData.YES);
-            ButtonType noButton = new ButtonType("No", ButtonBar.ButtonData.NO);
-            ButtonType cancelButton = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
-            alert.getButtonTypes().setAll(yesButton, noButton, cancelButton);
+            alert.getButtonTypes().setAll(ButtonType.YES, ButtonType.NO, ButtonType.CANCEL);
             Optional<ButtonType> result = alert.showAndWait();
-            if (result.isPresent() && result.get() == yesButton) {
+            if (result.isPresent() && result.get() == ButtonType.YES) {
                 saveTaskDataToFile(file);
                 return true;
-            } else if (result.isPresent() && result.get() == cancelButton) {
-                return false;
-            }
+            } else return result.isEmpty() || result.get() != ButtonType.CANCEL;
         }
         return true;
     }
