@@ -68,9 +68,9 @@ public class TodoController {
             }
         });
 
-        taskNameColumn.prefWidthProperty().bind(taskTable.widthProperty().multiply(0.746));
-        taskDateColumn.prefWidthProperty().bind(taskTable.widthProperty().multiply(0.15));
-        taskStatusColumn.prefWidthProperty().bind(taskTable.widthProperty().multiply(0.1));
+        taskNameColumn.prefWidthProperty().bind(taskTable.widthProperty().multiply(0.847));
+        taskDateColumn.prefWidthProperty().bind(taskTable.widthProperty().multiply(0.1));
+        taskStatusColumn.prefWidthProperty().bind(taskTable.widthProperty().multiply(0.05));
 
         taskStatusColumn.setResizable(false);
         taskDateColumn.setResizable(false);
