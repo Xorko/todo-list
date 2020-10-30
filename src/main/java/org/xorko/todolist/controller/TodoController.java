@@ -88,6 +88,7 @@ public class TodoController {
             newTask.setDone(false);
             mainApp.getTaskData().add(0, newTask);
             taskTable.refresh();
+            resetFields();
             mainApp.setDifferentFromSaved(true);
         }
     }
@@ -138,6 +139,7 @@ public class TodoController {
             currentlyEdited.setName(nameField.getText());
             currentlyEdited = null;
             taskTable.refresh();
+            resetFields();
             mainApp.setDifferentFromSaved(true);
         }
     }
@@ -181,6 +183,11 @@ public class TodoController {
         alert.showAndWait();
 
         return false;
+    }
+
+    private void resetFields() {
+        nameField.setText("");
+        datePicker.getEditor().setText("");
     }
 
     public void setMainApp(MainApp mainApp) {
